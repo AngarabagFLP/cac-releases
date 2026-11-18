@@ -68,7 +68,7 @@
       </li>
       <li id="paso-unirse">
         <h2>Únete</h2>
-        <p>Con CAC instalado, pulsa aquí: se abre con la invitación puesta y solo tienes que pulsar «Unirme».</p>
+        <p id="abrir-texto">Con CAC instalado, pulsa aquí: se abre con la invitación puesta y solo tienes que pulsar «Unirme».</p>
         <a class="btn primary" id="abrir" href="cac://unirse">Abrir CAC y unirme</a>
         <details>
           <summary>¿No se abre CAC?</summary>
@@ -105,7 +105,11 @@
         for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
         var inv = JSON.parse(new TextDecoder().decode(bytes));
         if (inv && typeof inv.a === 'string') {
-          $('titulo').textContent = (typeof inv.n === 'string' && inv.n ? inv.n + ', te' : 'Te') + ' invitan a la asociación «' + inv.a + '»';
+          // Un enlace para un grupo del chat (desde la 1.0.8): cada uno pone su nombre al unirse.
+          var grupo = typeof inv.g === 'string' && inv.g;
+          $('titulo').textContent = grupo ? 'Os invitan a la asociación «' + inv.a + '» (grupo «' + inv.g + '»)'
+            : (typeof inv.n === 'string' && inv.n ? inv.n + ', te' : 'Te') + ' invitan a la asociación «' + inv.a + '»';
+          if (grupo) $('abrir-texto').textContent = 'Con CAC instalado, pulsa aquí: se abre con la invitación puesta; escribe tu nombre y pulsa «Unirme».';
           document.title = 'Invitación a «' + inv.a + '» · CAC';
         }
       } catch (e) { /* el título genérico vale */ }
